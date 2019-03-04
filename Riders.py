@@ -3,7 +3,8 @@ from abc import ABCMeta
 
 class team:
     #team stff
-#new stuff?
+
+
 class rider:
     """
     Riders in Flamme Rouge have the following attributes:
