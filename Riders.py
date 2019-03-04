@@ -1,7 +1,8 @@
 from random import shuffle
 from abc import ABCMeta
 
-
+class team:
+    #team stff
 #new stuff?
 class rider:
     """
