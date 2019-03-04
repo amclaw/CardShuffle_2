@@ -2,8 +2,19 @@ from random import shuffle
 from abc import ABCMeta
 
 class team:
-    #team stff
-#new stuff?
+    #Teams objects
+    def __init__(self, colour, type):
+        self.colour = colour
+        self.type = type
+
+    def add_riders(self):
+        if self.type = "Human":
+            #create human riders
+        elif self.type = "Muscle":
+            #create muscle bot riders
+        else:
+            #must be peloton, create peloton
+
 class rider:
     """
     Riders in Flamme Rouge have the following attributes:
