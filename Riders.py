@@ -1,21 +1,21 @@
 from random import shuffle
 from abc import ABCMeta
 
-class team:
+class Team_1:
     #Teams objects
     def __init__(self, colour, type):
         self.colour = colour
         self.type = type
 
     def add_riders(self):
-        if self.type = "Human":
+        if self.type == "Human":
             #create human riders
-        elif self.type = "Muscle":
+        elif self.type == "Muscle":
             #create muscle bot riders
         else:
             #must be peloton, create peloton
 
-class rider:
+class Rider:
     """
     Riders in Flamme Rouge have the following attributes:
     1. A deck of cards
@@ -26,23 +26,27 @@ class rider:
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, type, deck, hand, recycle, discard):
+    def __init__(self, type, deck, discard):
         self.type = type
         self.deck = deck
-        self.hand = hand
-        self.recycle = recycle
         self.discard = discard
 
+class Human_rider(Rider):
+    def __init__(self, type, deck, discard, hand, recycle):
+        super().__init__(type, deck, discard)
+        self.hand = hand
+        self.recycle = recycle
+
     def move(self):
-        if len(self.deck)>4:
+        if len(self.deck) > 4:
             handsize = 4
-        elif len(self.recycle)>0:
+        elif len(self.recycle) > 0:
             shuffle(self.recycle)
             self.deck.extend(self.recycle)
             del self.recycle[:]
-            handsize = min(4,len(self.deck))
-        elif len(self.deck)>0:
-            print ("Didn't expect this scenario. Go check the Move method in Rider Class.")
+            handsize = min(4, len(self.deck))
+        elif len(self.deck) > 0:
+            print("Didn't expect this scenario. Go check the Move method in Rider Class.")
             handsize = len(self.deck)
         else:
             self.deck.append("E")
@@ -61,6 +65,17 @@ class rider:
     def exhausted(self):
         self.recycle.append('E')
 
+class Bot_rider(Rider):
+    def __init__(self, type, deck, discard):
+        super().__init__(type, deck, discard)
+
+    def move(self):
+        if len(self.deck)>0:
+            self.discard.append(self.deck[0])
+            self.deck = self.deck[1:]
+        else:
+            self.discard.append("E")
+
 rider_list = {1:"Rouler", 2:"Sprinteur"}
 
 deck_list = {"Rouler":['3', '3', '3', '4', '4', '4', '5', '5', '5', '6', '6', '6', '7', '7', '7'],\
@@ -72,11 +87,12 @@ print ("Game is starting!")
 #create riders
 select_first_rider = int(input("Select a Rider: {} ".format(rider_list)))
 select_second_rider = int(input("Select a Rider: {} ".format(rider_list)))
+while select_second_rider == select_first_rider:
+    print("Can't have both riders the same!")
+    select_second_rider = int(input("Select a Rider: {} ".format(rider_list)))
 
-rider_1 = rider(rider_list[select_first_rider], deck_list[rider_list[select_first_rider]],\
-                [], [], [])
-rider_2 = rider(rider_list[select_second_rider], deck_list[rider_list[select_second_rider]],\
-                [], [], [])
+rider_1 = Human_rider(rider_list[select_first_rider], deck_list[rider_list[select_first_rider]], [], [], [])
+rider_2 = Human_rider(rider_list[select_second_rider], deck_list[rider_list[select_second_rider]], [], [], [])
 
 team = {1:rider_1, 2:rider_2}
 
@@ -87,6 +103,16 @@ for riders in team:
 
 print("Rider 1 is a", rider_1.type, "and has the following deck:", rider_1.deck)
 print("Rider 2 is a", rider_2.type, "and has the following deck:", rider_2.deck)
+
+playing_with_peloton = str(input("Are you playing with the Peloton? (y/n): ")).lower()
+while playing_with_peloton not in "yn":
+    print("I'm sorry, I didn't understand that selection.")
+    playing_with_peloton = str(input("Are you playing with the Peloton? (y/n): ")).lower()
+
+playing_with_muscle = int(input("How many Muscle teams are you playing with? (0-2): "))
+while playing_with_muscle not in [0, 1, 2]:
+    print("I'm sorry, I didn't understand that selection.")
+    playing_with_muscle = int(input("How many Muscle teams are you playing with? (0-2): "))
 
 playing = True
 
